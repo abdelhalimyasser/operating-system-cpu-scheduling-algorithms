@@ -7,25 +7,46 @@ import model.Process;
 import java.util.ArrayList;
 import java.util.List;
 
+
 /**
+ * Class HRRN
+ * <br>
  * This class implements the Highest Response Ratio Next (HRRN) scheduling algorithm.
- * * <h3>Algorithm Overview:</h3>
+ *
+ * <h3>Algorithm Overview:</h3>
  * <p>
- * HRRN is a Non-Preemptive algorithm designed to solve the Starvation problem of SJF.
- * Instead of just picking the shortest job, it considers how long a process has been waiting.
+ * HRRN is a non-preemptive scheduling algorithm designed to solve the starvation problem
+ * found in Shortest Job First (SJF). Instead of solely selecting the process with the
+ * shortest burst time, it calculates a dynamic priority based on how long a process has
+ * been waiting in the ready queue.
  * </p>
  *
  * <h3>The Formula:</h3>
  * <p>
- * Response Ratio = (Waiting Time + Burst Time) / Burst Time
+ * <code>Response Ratio = (Waiting Time + Burst Time) / Burst Time</code>
  * </p>
+ *
+ * <h3>Execution Flow:</h3>
+ * <ol>
+ *    <li><b>Filter Arrived Processes:</b> At any given <code>currentTime</code>, the scheduler identifies all processes that have already arrived.</li>
+ *    <li><b>Ratio Calculation:</b> For each arrived process, the waiting time is calculated (<code>currentTime - arrivalTime</code>), and then the Response Ratio is computed.</li>
+ *    <li><b>Process Selection:</b> The process with the highest Response Ratio is selected.</li>
+ *    <li><b>Tie-Breaker:</b> If two processes have the exact same ratio, the algorithm falls back to First-Come-First-Served (FCFS) based on their arrival time.</li>
+ *    <li><b>Execute:</b> Since HRRN is non-preemptive, the clock advances by the selected process's entire burst time.</li>
+ *    <li><b>Calculate Metrics:</b> Compute Waiting Time (WT), Turnaround Time (TAT), Completion Time (CT), and Response Time (RT) for the completed process.</li>
+ * </ol>
  *
  * @author Abdelhalim Yasser
  * @version 1.0
  * @since 17-04-2026
  */
-
 public class HRRN implements CpuScheduler {
+    /**
+     * The main method that schedules the processes based on the HRRN algorithm.
+     * @param processes a list of processes to be scheduled
+     * @return a list of execution records that contain the start and end times of each process's execution for visualization purposes
+     */
+    @Override
     public List<ExecutionRecord> schedule(List<Process> processes) {
         List<ExecutionRecord> executionRecords = new ArrayList<>();
         List<Process> temp =  new ArrayList<>(processes);

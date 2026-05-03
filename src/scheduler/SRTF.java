@@ -8,30 +8,38 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * This class implements the Shortest Remaining Time First (SRTF) scheduling algorithm,
- * which is a preemptive version of the Shortest Job First (SJF) algorithm.
+ * Class SRTF
+ * <br>
+ * This class implements the Shortest Remaining Time First (SRTF) scheduling algorithm.
  *
  * <h3>Algorithm Overview:</h3>
  * <p>
- * SRTF actively monitors the ready queue. If a new process arrives with a shorter
+ * SRTF is the preemptive version of the Shortest Job First (SJF) algorithm.
+ * It actively monitors the ready queue. If a new process arrives with a shorter
  * remaining execution time than the currently running process, the CPU preempts
  * (pauses) the current process and allocates execution to the new, shorter process.
  * </p>
  *
- * <h3>How it works with the Simulated Clock:</h3>
+ * <h3>Execution Flow:</h3>
  * <ol>
- * <li><b>Tick-by-Tick Evaluation:</b> The clock moves forward 1 unit at a time to check for new arrivals.</li>
- * <li><b>Context Switching:</b> If the shortest process changes from the previously running one, an execution block is saved, and a new one starts.</li>
- * <li><b>Metrics Trick:</b> Because a process can start and stop multiple times, Waiting Time is calculated at the very end using the formula: <code>WT = Turnaround Time - Burst Time</code>.</li>
+ *    <li><b>Tick-by-Tick Evaluation:</b> The simulated clock moves forward 1 unit at a time to continuously check for new arrivals and evaluate remaining times.</li>
+ *    <li><b>Process Selection:</b> At each time unit, the scheduler filters arrived processes and selects the one with the absolute shortest remaining time.</li>
+ *    <li><b>Context Switching:</b> If the shortest process changes from the previously running one, the current execution block is saved, and a new execution block starts for the new process.</li>
+ *    <li><b>Preemption:</b> The selected process executes for 1 time unit, and its remaining time is decremented.</li>
+ *    <li><b>Calculate Metrics:</b> Because a process can start and pause multiple times, metrics are calculated only when its remaining time reaches 0, using the formula: <code>WT = Turnaround Time - Burst Time</code>.</li>
  * </ol>
  *
  * @author Abdelhalim Yasser
  * @version 1.0
  * @since 17-04-2026
  */
-
-
 public class SRTF implements CpuScheduler {
+    /**
+     * The main method that schedules the processes based on the SRTF algorithm.
+     * @param processes a list of processes to be scheduled
+     * @return a list of execution records that contain the start and end times of each process's execution for visualization purposes
+     */
+    @Override
     public List<ExecutionRecord> schedule(List<Process> processes) {
         List<ExecutionRecord> executionRecords = new ArrayList<>();
         List<Process> temp = new ArrayList<>(processes);

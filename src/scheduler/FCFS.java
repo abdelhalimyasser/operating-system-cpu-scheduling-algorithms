@@ -9,8 +9,14 @@ import java.util.Comparator;
 import java.util.List;
 
 /**
+ * Class FCFS
+ * <br>
  * This class implements the First-Come, First-Served (FCFS) scheduling algorithm.
+ *
+ * <h3>Algorithm Overview:</h3>
+ * <p>
  * The FCFS algorithm schedules processes in the order they arrive, without preemption.
+ * </p>
  *
  * <h3>How the Simulated Clock Works:</h3>
  * <p>
@@ -21,20 +27,23 @@ import java.util.List;
  *
  * <h3>Execution Flow:</h3>
  * <ol>
- * <li><b>Sort:</b> Processes are sorted by their arrival time (FIFO).</li>
- * <li><b>Wait for Arrival:</b> If the CPU is idle, advance <code>currentTime</code> to the next process's arrival time.</li>
- * <li><b>Execute:</b> Advance the clock by the process's burst time (since FCFS is non-preemptive).</li>
- * <li><b>Calculate Metrics:</b> Compute Response Time, Waiting Time, Turnaround Time, and Completion Time based on the clock's movement.</li>
- * <li><b>Record:</b> Save the start and end times in the execution record for visualization (Gantt Chart).</li>
+ *    <li><b>Sort:</b> Processes are sorted by their arrival time (FIFO).</li>
+ *    <li><b>Wait for Arrival:</b> If the CPU is idle, advance <code>currentTime</code> to the next process's arrival time.</li>
+ *    <li><b>Execute:</b> Advance the clock by the process's burst time (since FCFS is non-preemptive).</li>
+ *    <li><b>Calculate Metrics:</b> Compute Response Time, Waiting Time, Turnaround Time, and Completion Time based on the clock's movement.</li>
+ *    <li><b>Record:</b> Save the start and end times in the execution record for visualization (Gantt Chart).</li>
  * </ol>
  *
  * @author Abdelhalim Yasser
  * @version 1.0
  * @since 15-04-2026
  */
-
-
 public class FCFS implements CpuScheduler {
+    /**
+     * The main method that schedules the processes based on the FCFS algorithm.
+     * @param processes a list of processes to be scheduled
+     * @return a list of execution records that contain the start and end times of each process's execution for visualization purposes
+     */
     @Override
     public List<ExecutionRecord> schedule(List<Process> processes) {
         List<ExecutionRecord> executionRecords = new ArrayList<>();
