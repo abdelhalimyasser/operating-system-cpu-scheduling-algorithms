@@ -21,14 +21,15 @@ public class Main {
 
         System.out.println("Base Workload (Same for all threads):");
         baseWorkload.forEach(p -> System.out.println(
-                "PID: " + p.getId() + " | Arrival: " + p.getArrivalTime() + 
-                " | Burst: " + p.getBurstTime() + " | Priority: " + p.getPriority()
+                "PID: " + p.getId() + " | Arrival: " + p.getArrivalTime() +
+                        " | Burst: " + p.getBurstTime() + " | Priority: " + p.getPriority()
         ));
         System.out.println("--------------------------------------------------\n");
 
         // Initialize all schedulers
         CpuScheduler fcfs = new FCFS();
-        CpuScheduler sjf = new SJF();
+        CpuScheduler sjfPrem = new SJF("prem");
+        CpuScheduler sjfNonPrem = new SJF();
         CpuScheduler srtf = new SRTF();
         CpuScheduler hrrn = new HRRN();
         CpuScheduler rr = new RoundRobin(2); // Time Quantum = 2
@@ -36,33 +37,22 @@ public class Main {
         CpuScheduler priorityPrem = new PriorityScheduling("prem");
 
         // Create a thread for each scheduling algorithm
-        Thread t1 = createSchedulerThread("FCFS", fcfs, baseWorkload);
-        Thread t2 = createSchedulerThread("SJF (Non-Preemptive)", sjf, baseWorkload);
-        Thread t3 = createSchedulerThread("SRTF (Preemptive SJF)", srtf, baseWorkload);
-        Thread t4 = createSchedulerThread("HRRN", hrrn, baseWorkload);
-        Thread t5 = createSchedulerThread("Round Robin (Q=2)", rr, baseWorkload);
-        Thread t6 = createSchedulerThread("Priority (Non-Preemptive)", priorityNonPrem, baseWorkload);
-        Thread t7 = createSchedulerThread("Priority (Preemptive)", priorityPrem, baseWorkload);
+        Thread[] threads = {
+            createSchedulerThread("FCFS", fcfs, baseWorkload),
+            createSchedulerThread("SJF (Non-Preemptive)", sjfPrem, baseWorkload),
+            createSchedulerThread("SJF (Preemptive)", sjfNonPrem, baseWorkload),
+            createSchedulerThread("SRTF (Preemptive SJF)", srtf, baseWorkload),
+            createSchedulerThread("HRRN", hrrn, baseWorkload),
+            createSchedulerThread("Round Robin (Q=2)", rr, baseWorkload),
+            createSchedulerThread("Priority (Non-Preemptive)", priorityNonPrem, baseWorkload),
+            createSchedulerThread("Priority (Preemptive)", priorityPrem, baseWorkload)
+        };
 
-        // Start all threads
-        t1.start();
-        t2.start();
-        t3.start();
-        t4.start();
-        t5.start();
-        t6.start();
-        t7.start();
+        for (Thread t : threads) t.start();
 
         try {
-            // Wait for all threads to finish before printing the final message
-            t1.join();
-            t2.join();
-            t3.join();
-            t4.join();
-            t5.join();
-            t6.join();
-            t7.join();
-            System.out.println("\nAll scheduling algorithms completed successfully.");
+            for (Thread t : threads) t.join();
+            System.out.println("\nAll scheduling algorithms compared successfully.");
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
