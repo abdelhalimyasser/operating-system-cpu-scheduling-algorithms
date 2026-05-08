@@ -15,7 +15,7 @@ import java.util.List;
  *
  * <h3>Algorithm Overview:</h3>
  * <p>
- * HRRN is a non-preemptive scheduling algorithm designed to solve the starvation problem
+ * HRRN is a non-preemptive schduling algorithm designed to solve the starvation problem
  * found in Shortest Job First (SJF). Instead of solely selecting the process with the
  * shortest burst time, it calculates a dynamic priority based on how long a process has
  * been waiting in the ready queue.
